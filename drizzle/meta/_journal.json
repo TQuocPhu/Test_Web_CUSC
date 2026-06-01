@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1779782079356,
+      "tag": "0000_rainy_moonstone",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1779783170874,
+      "tag": "0001_mute_kat_farrell",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1779870051704,
+      "tag": "0002_square_ender_wiggin",
+      "breakpoints": true
+    }
+  ]
+}

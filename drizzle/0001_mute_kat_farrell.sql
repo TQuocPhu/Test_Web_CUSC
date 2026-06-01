@@ -1,0 +1,41 @@
+CREATE TABLE `form_categories` (
+	`id` bigint AUTO_INCREMENT NOT NULL,
+	`name` varchar(255) NOT NULL,
+	`slug` varchar(255) NOT NULL,
+	`icon` varchar(255),
+	`color` varchar(50),
+	`parent_id` bigint,
+	`sort_order` int DEFAULT 0,
+	`created_at` timestamp DEFAULT (now()),
+	CONSTRAINT `form_categories_id` PRIMARY KEY(`id`),
+	CONSTRAINT `form_categories_slug_unique` UNIQUE(`slug`)
+);
+--> statement-breakpoint
+CREATE TABLE `form_templates` (
+	`id` bigint AUTO_INCREMENT NOT NULL,
+	`title` varchar(255) NOT NULL,
+	`slug` varchar(255) NOT NULL,
+	`short_description` text,
+	`full_description` text,
+	`cover_image` text,
+	`creator_id` bigint NOT NULL,
+	`visibility` enum('public','private','unlisted') NOT NULL DEFAULT 'public',
+	`pricing_type` enum('free','paid') NOT NULL DEFAULT 'free',
+	`price` decimal(10,2) DEFAULT '0',
+	`status` enum('draft','published','archived') NOT NULL DEFAULT 'draft',
+	`tags` json,
+	`featured` boolean DEFAULT false,
+	`allow_download` boolean DEFAULT true,
+	`allow_eform` boolean DEFAULT true,
+	`allow_preview` boolean DEFAULT true,
+	`latest_version_id` bigint,
+	`view_count` int DEFAULT 0,
+	`total_downloads` int DEFAULT 0,
+	`total_usages` int DEFAULT 0,
+	`total_shares` int DEFAULT 0,
+	`favorite_count` int DEFAULT 0,
+	`created_at` timestamp DEFAULT (now()),
+	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `form_templates_id` PRIMARY KEY(`id`),
+	CONSTRAINT `form_templates_slug_unique` UNIQUE(`slug`)
+);
