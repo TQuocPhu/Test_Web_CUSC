@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   CreateTemplateStaticSchema,
+  UpdateTemplateComboSchema,
   UpdateTemplateVersionSchema,
 } from "../validations/templates.schema";
 
@@ -11,6 +12,8 @@ export type CreateTemplateStaticInput =
 export type UpdateTemplateVersionInput =
   z.infer<typeof UpdateTemplateVersionSchema>;
 
+
+  export type UpdateTemplateComboInput = z.infer<typeof UpdateTemplateComboSchema>;
 
 // business entity
 export interface Template {

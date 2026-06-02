@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { TemplateService } from "../services/templates.service";
-import { CreateTemplateStaticSchema, UpdateTemplateVersionSchema } from "../validations/templates.schema";
+import { CreateTemplateStaticSchema, UpdateTemplateVersionSchema, BaseTemplateStaticObject, UpdateTemplateComboSchema } from "../validations/templates.schema";
 import { SubmitFormSchema } from "../validations/submissions.schema";
 import { ZodError } from 'zod';
 import { sendSuccess, sendError } from "@/src/utils/api-response";
@@ -96,15 +96,22 @@ export class TemplateAction {
 
     updateTemplate = async (req: Request, res: Response): Promise<void> => {
         try {
+
+            const adminId = 1;
+
             if (!req.params.id) {
                 res.status(400).json(sendError("Thiếu tham số ID trên URL", 400, "VALIDATION_ERROR"));
                 return;
             }
             const templateId = parseInt(String(req.params.id));
-            const partialStaticData = CreateTemplateStaticSchema.partial().parse(req.body);
+            // const partialStaticData = BaseTemplateStaticObject.partial().parse(req.body);
 
-            const result = await this.templateService.updateTemplateDetails(templateId, partialStaticData);
-            
+            const parsedBody = UpdateTemplateComboSchema.parse(req.body);
+
+            const { schemaJson, versionDescription, ...staticData } = parsedBody;
+
+            const result = await this.templateService.updateTemplateDetail(templateId, staticData, schemaJson, adminId, versionDescription);
+
             res.status(200).json(
                 sendSuccess(result, "Cập nhật thông tin cấu trúc biểu mẫu thành công!")
             );
@@ -125,8 +132,8 @@ export class TemplateAction {
 
             const result = await this.templateService.handleUserSubmission(userId, templateId, submitInput);
 
-            const customMessage = submitInput.status === 'DRAFT' 
-                ? "Hệ thống đã tự động lưu lại bản nháp phiếu thành công!" 
+            const customMessage = submitInput.status === 'DRAFT'
+                ? "Hệ thống đã tự động lưu lại bản nháp phiếu thành công!"
                 : "Nộp đơn thành công, đang chuyển lên luồng hội đồng duyệt!";
 
             res.status(200).json(
@@ -149,6 +156,14 @@ export class TemplateAction {
 
             res.status(400).json(
                 sendError("Dữ liệu đầu vào không hợp lệ", 400, "VALIDATION_ERROR", formattedErrors)
+            );
+            return;
+        }
+
+        if (error && typeof error === 'object' && 'statusCode' in error && 'errorType' in error) {
+            const customError = error as { message: string; statusCode: number; errorType: any };
+            res.status(customError.statusCode).json(
+                sendError(customError.message, customError.statusCode, customError.errorType)
             );
             return;
         }
