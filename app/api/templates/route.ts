@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
 
 // [POST] http://localhost:3000/api/templates
 export async function POST(request: NextRequest) {
+  console.log("👉 URL THỰC TẾ LỌT VÀO ĐÂY LÀ:", request.url);
   const body = await request.json();
   
   const mockReq = { body };

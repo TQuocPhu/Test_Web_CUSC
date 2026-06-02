@@ -17,11 +17,12 @@ type RouteParams = { params: { id: string } };
 // [POST] http://localhost:3000/api/templates/[id]/submit
 export async function POST(request: NextRequest, { params }: RouteParams) {
   // 1. Đọc dữ liệu JSON gửi lên từ Postman (Cụm 2)
+  const resolvedParams = await params;
   const body = await request.json();
   
   // 2. Gom cả params.id và body vào một Object giả lập Request của Express
   const mockReq = { 
-    params: { id: params.id }, 
+    params: { id: resolvedParams.id },
     body: body 
   };
   

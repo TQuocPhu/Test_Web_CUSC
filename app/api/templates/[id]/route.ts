@@ -14,7 +14,9 @@ type RouteParams = { params: { id: string } };
 
 // [GET] http://localhost:3000/api/templates/[id]
 export async function GET(request: NextRequest, { params }: RouteParams) {
-  const mockReq = { params: { id: params.id } };
+
+  const resolvedParams = await params;
+  const mockReq = { params: { id: resolvedParams.id } };
   let resultData: unknown = null;
 
   const mockRes: MockResponse = {
@@ -40,9 +42,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // [PUT] http://localhost:3000/api/templates/[id]
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   const body = await request.json();
+  const resolvedParams = await params;
   
   const mockReq = { 
-    params: { id: params.id },
+    params: { id: resolvedParams.id },
     body: body 
   };
   
