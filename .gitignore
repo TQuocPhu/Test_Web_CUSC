@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# mô tả dự án (readme.md dùng cho Agent)
+description-project.md
